@@ -21,7 +21,7 @@ import jamjamapp.views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', jamjamapp.views.layout, name='layout'),  # 임시메인
+    path('', jamjamapp.views.layout, name='layout(M)'),  # 임시메인
     path('detail/<str:id>/', jamjamapp.views.detail,
          name='detail'),  # 커뮤니티 게시글 자세히 보기
     path('community/<int:hashtag_id>/', jamjamapp.views.community,
