@@ -407,10 +407,6 @@ def course_play_R(request, small_region_id):
 
 # ------민정이 개발-------
 
-# 임시 메인
-def layout(request):
-    return render(request, 'layout.html')
-
 # day_detail
 def day_detail(request):
     posts = Post.objects

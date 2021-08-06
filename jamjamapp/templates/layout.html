@@ -1,14 +1,14 @@
 <!--커뮤니티 목록-->
-<h1>layout</h1>
+<h1>민정 layout</h1>
 
 {% for hashtag in hashtag.all %}
-<ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+<ul class="nav nav-tabs">
   <li class="nav-item"><a class="nav-link" href="{% url 'community' hashtag.id %}">{{ hashtag.name }}</a></li>
 </ul>
 {% endfor %}
 
 <!--드롭다운 지역 목록후보 1-->
-<script>
+<!-- <script>
     function changes1Step(fr) {
      if(fr=="커뮤") {
       num = new Array("--2단계--", "10대","20~30대");
@@ -42,19 +42,17 @@
   <option>--2단계--</option>
 </select>
 </form>
-</div>  
+</div>   -->
 
 
 <!--민정 layout-->
 
 
-<h1>layout</h1>
+<h1>예찬 layout</h1>
 
-<ul class="nav nav-tabs">
-    <li role="presentation" class="active"><a href="{% url 'day_detail' %}">day_detail</a></li>
-    <li role="presentation" class="active"><a href="{% url 'profile' %}">profile</a></li>
-    <li role="presentation" class="active"><a href="{% url 'bucketlist' %}">bucketlist</a></li>
-  </ul>
+<button type="button"><a href="{% url 'day_detail' %}">day_detail</a></button>
+<button type="button"><a href="{% url 'profile' %}">profile</a></button>
+<button type="button"><a href="{% url 'bucketlist' %}">bucketlist</a></button>
 
 
 <!--예찬 layout-->
