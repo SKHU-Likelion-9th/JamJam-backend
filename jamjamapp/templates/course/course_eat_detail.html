@@ -1,17 +1,17 @@
-<p>제목 : {{ blog.Title }}</p>
-<p>작성일 : {{ blog.Write_day }}</p>
-<p>내용 : {{ blog.Content }}</p>
-{% if blog.Image %}
-<img src="{{ blog.Image.url }}">
+<p>제목 : {{ eat_C.Title }}</p>
+<p>작성일 : {{ eat_C.Write_day }}</p>
+<p>내용 : {{ eat_C.Content }}</p>
+{% if eat_C.Image %}
+<img src="{{ eat_C.Image.url }}">
 {% endif %}
-<a href="{% url 'commu_edit' blog.id %}">수정하기</a>
-<a href="{% url 'commu_delete' blog.id %}">삭제하기</a>
+<a href="{% url 'course_eat_U' eat_C.id %}">수정하기</a>
+<a href="{% url 'course_eat_delete' eat_C.id %}">삭제하기</a>
 
 
-<p>좋아요 {{ blog.Blog_likes.count }}개</p>
+<p>좋아요 {{ eat_C.Eat_likes.count }}개</p>
 
-<a href="{% url 'commu_like' pk=blog.pk %}">
-{% if user in blog.Blog_likes.all %}
+<a href="{% url 'course_eat_like' pk=eat_C.pk %}">
+{% if user in eat_C.Eat_likes.all %}
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
         <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
     </svg>
@@ -23,18 +23,19 @@
 </a>
 
 
-<p>조회수 {{blog.view_count}}개</p>
+<p>조회수 {{eat_C.view_count}}개</p>
 
 
 <h2>댓글</h2>
 
-<form method="POST" action="{% url 'commu_detail' blog.id %}">
+<form method="POST" action="{% url 'course_eat_detail' eat_C.id %}">
     {% csrf_token %}
     <p>{{ form.as_p }}</p> 
     <input type="submit" value="submit">
 </form>
 
-{% for comment in blog.comments.all %}
+{% for comment in eat_C.comments.all %}
 <p>{{comment.text}}</p>
-<a href="{% url 'commu_delete_comment' blog.id comment.id %}">삭제하기</a>
+<a href="{% url 'course_eat_delete_comment' eat_C.id comment.id %}">삭제하기</a>
 {% endfor %}
+

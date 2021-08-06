@@ -1,0 +1,59 @@
+<!--커뮤니티 목록-->
+<h1>민정 layout</h1>
+
+{% for hashtag in hashtag.all %}
+<ul class="nav nav-tabs">
+  <li class="nav-item"><a class="nav-link" href="{% url 'community' hashtag.id %}">{{ hashtag.name }}</a></li>
+</ul>
+{% endfor %}
+
+<!--드롭다운 지역 목록후보 1-->
+<!-- <script>
+    function changes1Step(fr) {
+     if(fr=="커뮤") {
+      num = new Array("--2단계--", "10대","20~30대");
+      vnum = new Array("--2단계--", "10대","20~30대");
+     }
+     else if(fr=="니티") {
+      num = new Array("--2단계--", "자유게시판","성고민");
+      vnum = new Array("--2단계--", "자유게시판","성고민");
+     }
+     
+     for(i=0; i<form.Step2.length; i++) {
+      form.Step2.options[i] = null;
+     }
+     
+     for(i=0; i<num.length; i++) {
+      form.Step2.options[i] = new Option(num[i],vnum[i]);
+     }
+    }
+</script>
+
+
+<div> 
+<form name='form'>
+<select name='Step1' onchange='changes1Step(value)'>
+<option>--1단계--</option>
+<option value="커뮤">커뮤</option>
+<option value="니티">니티</option>
+</select>
+
+<select name='Step2' onchange='changes2Step(value)'>
+  <option>--2단계--</option>
+</select>
+</form>
+</div>   -->
+
+
+<!--민정 layout-->
+
+
+<h1>예찬 layout</h1>
+
+<button type="button"><a href="{% url 'day_detail' %}">day_detail</a></button>
+<button type="button"><a href="{% url 'profile' %}">profile</a></button>
+<button type="button"><a href="{% url 'bucketlist' %}">bucketlist</a></button>
+<button type="button"><a href="{% url 'pay' %}">pay</a></button>
+
+
+<!--예찬 layout-->
