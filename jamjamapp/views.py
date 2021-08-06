@@ -3,9 +3,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
-from .models import Blog, Comment, Hashtag, Post, Eat_C, Look_C, Play_C, Big_Region, Small_Region
-from .forms import CreateForm, CommentForm, PostForm, Eat_CForm, Look_CForm, Play_CForm, Big_RegionForm, Small_RegionForm
-from datetime import date, datetime, timedelta
+from .models import Blog, Comment, Hashtag, Eat_C, Look_C, Play_C, Big_Region, Small_Region, Profile, Bucket, Post
+from .forms import CreateForm, CommentForm, Eat_CForm, Look_CForm, Play_CForm, Big_RegionForm, Small_RegionForm, PostForm, ProfileForm, BucketForm, PostForm
+#from datetime import date, datetime, timedelta
 
 # Create your views here.
 
@@ -27,10 +27,10 @@ def main(request):
 # ------frontend 개발-------
 
 #임시 메인페이지
-def layout_M(request):
+def layout(request):
     blogs = Blog.objects
     hashtag = Hashtag.objects
-    return render(request, 'layout_M.html', {'blogs':blogs, 'hashtag':hashtag})
+    return render(request, 'layout.html', {'blogs':blogs, 'hashtag':hashtag})
 
 #커뮤니티 첫 페이지
 def community(request, hashtag_id):
@@ -54,29 +54,30 @@ def commu_create(request, blog=None):
             blog.Write_day = timezone.datetime.now()
             blog.save()
             form.save_m2m()
-            return redirect('layout_M')
+            return redirect('layout')
     else:
         form = CreateForm(instance=blog)
         return render(request, 'community/commu_write.html', {'form':form, 'hashtag':hashtag})
 
-#커뮤니티 게시글 자세히 보기 페이지#(+ 댓글)
+#커뮤니티 게시글 자세히 보기 페이지 + 댓글
 @login_required
 def commu_detail(request, id):
     blog = get_object_or_404(Blog, id = id)
     default_view_count = blog.view_count
     blog.view_count = default_view_count + 1
     blog.save()
-    #if request.method == 'POST':
-        #form = CommentForm(request.POST)
-        #if form.is_valid():
-        #    comment = form.save(commit=False)
-        #    comment.post_id = blog
-        #    comment.text = form.cleaned_data['text']
-        #    comment.save()
-        #return redirect('detail', id)
-    #else:
-        #form=CommentForm()
-    return render(request, 'community/commu_detail.html', {'blog':blog})#, 'form':form})
+    #여기서부터 댓글
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+           comment = form.save(commit=False)
+           comment.post_id = blog
+           comment.text = form.cleaned_data['text']
+           comment.save()
+        return redirect('commu_detail', id)
+    else:
+        form=CommentForm()
+    return render(request, 'community/commu_detail.html', {'blog':blog, 'form':form})
 
 #커뮤니티 U
 @login_required
@@ -122,15 +123,14 @@ def commu_edit(request, id):
 def commu_delete(request, id):
     delete_blog = get_object_or_404(Blog, id = id)
     delete_blog.delete()
-    return redirect ('layout_M')
+    return redirect ('layout')
 
 #댓글 삭제
-# @login_required
-# def commu_delete_comment(request, com_id, post_id):
-
-#     mycom = Comment.objects.get(id=com_id)
-#     mycom.delete()
-#     return redirect ('detail', post_id)
+@login_required
+def commu_delete_comment(request, com_id, post_id):
+    mycom = Comment.objects.get(id=com_id)
+    mycom.delete()
+    return redirect ('commu_detail', post_id)
 
 #좋아요
 @login_required
@@ -169,8 +169,8 @@ def course_eat_C(request, eat_C=None):
             eat_C = form.save(commit=False)
             eat_C.Write_day = timezone.datetime.now()
             eat_C.save()
-            eat_C.save_m2m()
-            return redirect('course/course_eat')
+            form.save_m2m()
+            return redirect('course_eat')
     else:
         form = Eat_CForm(instance=eat_C)
         return render(request, 'course/course_eat_C.html', {'form':form, 'big_region':big_region, 'small_region':small_region})
@@ -229,14 +229,31 @@ def course_play_C(request, play_C=None):
         form = Play_CForm(instance=play_C)
         return render(request, 'course/course_play_C.html', {'form':form, 'big_region':big_region, 'small_region':small_region})
 
-#course_eat 게시글 자세히 보기 페이지
+#course_eat 게시글 자세히 보기 페이지 + 댓글
 @login_required
 def course_eat_detail(request, id):
     eat_C = get_object_or_404(Eat_C, id = id)
     default_view_count = eat_C.view_count
     eat_C.view_count = default_view_count + 1
     eat_C.save()
-    return render(request, 'course/course_eat_detail', {'eat_C':eat_C})
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+           comment = form.save(commit=False)
+           comment.post_id = eat_C
+           comment.text = form.cleaned_data['text']
+           comment.save()
+        return redirect('course_eat_detail', id)
+    else:
+        form=CommentForm()
+        return render(request, 'course/course_eat_detail.html', {'eat_C':eat_C})
+
+#댓글 삭제
+@login_required
+def commu_delete_comment(request, com_id, post_id):
+    mycom = Comment.objects.get(id=com_id)
+    mycom.delete()
+    return redirect ('commu_detail', post_id)
 
 #course_eat_U
 @login_required
@@ -257,7 +274,7 @@ def course_eat_U(request, id):
 def course_eat_delete(request, id):
     delete_eat_C = get_object_or_404(Eat_C, id = id)
     delete_eat_C.delete()
-    return redirect ('course/course_eat_R')
+    return redirect ('course_eat')
 
 #course_eat 좋아요
 @login_required
@@ -390,36 +407,52 @@ def course_play_R(request, small_region_id):
 
 # ------민정이 개발-------
 
-
+# 임시 메인
 def layout(request):
-    posts = Post.objects
-    return render(request, 'layout(Y).html', {'posts': posts})
+    return render(request, 'layout.html')
 
-
+# day_detail
 def day_detail(request):
     posts = Post.objects
-    return render(request, 'day_detail.html', {'posts': posts})
+    return render(request, 'day_detail.html', {'posts':posts})
 
-# 글 작성
+# 프로필
+def profile(request):
+    profiles = Profile.objects
+    return render(request, 'mypage/profile.html', {'profiles':profiles})
 
+# 버킷리스트
+def bucketlist(request):
+    buckets = Bucket.objects
+    return render(request, 'bucketlist.html', {'buckets':buckets})
 
-def create(request):
+#다이어리 작성
+def diary_create(request):
     if request.method == "POST":
         form = PostForm(request.POST)
         if form.is_valid():
             form = form.save(commit=False)
-            form.write_date = timezone.now()
             form.save()
             return redirect('layout')
     else:
         form = PostForm
-        return render(request, 'diary.html', {'form': form})
+        return render(request, 'diary.html', {'form':form})
 
-# 디테일
+#버킷리스트 작성
+def bucket_create(request):
+    if request.method == "POST":
+        form = BucketForm(request.POST)
+        if form.is_valid():
+            bucket = form.save(commit=False)
+            bucket.save()
+            return redirect('layout')
+    else:
+        form = BucketForm
+        return render(request, 'bucketlist_write.html', {'form':form})
 
-
-def detail(request, id):
-    post = get_object_or_404(Post, id=id)
+#다이어리 디테일
+def diary_detail(request, id):
+    post = get_object_or_404(Post, id = id)
     if request.method == 'POST':
         form = PostForm(request.POST)
         if form.is_valid():
@@ -429,14 +462,27 @@ def detail(request, id):
             post.save()
             return redirect('day_detail_write', id)
     else:
-        form = PostForm()
-        return render(request, 'day_detail_detail.html', {'post': post, 'form': form})
+        form=PostForm()
+        return render(request, 'day_detail_detail.html', {'post':post, 'form':form})
 
-# 수정
+#버킷리스트 디테일
+def bucket_detail(request, id):
+    bucket = get_object_or_404(Bucket, id = id)
+    if request.method == 'POST':
+        form = BucketForm(request.POST)
+        if form.is_valid():
+            bucket = form.save(commit=False)
+            bucket.post_id = bucket
+            bucket.text = form.cleaned_data['text']
+            bucket.save()
+            return redirect('layout', id)
+    else:
+        form=BucketForm()
+        return render(request, 'bucketlist_detail.html', {'bucket':bucket, 'form':form})
 
-
-def edit(request, id):
-    post = get_object_or_404(Post, id=id)
+#데이디테일 수정
+def diary_edit(request, id):
+    post = get_object_or_404(Post, id = id)
     if request.method == "POST":
         form = PostForm(request.POST, instance=post)
         if form.is_valid():
@@ -445,13 +491,73 @@ def edit(request, id):
             return redirect('layout')
     else:
         form = PostForm(instance=post)
-        return render(request, 'diary_edit.html', {'form': form})
+        return render(request, 'diary_edit.html', {'form':form})
 
-# 삭제
+#버킷리스트 수정
+def bucket_edit(request, id):
+    bucket = get_object_or_404(Bucket, id = id)
+    if request.method == "POST":
+        form = BucketForm(request.POST, instance=bucket)
+        if form.is_valid():
+            form.save(commit=False)
+            form.save()
+            return redirect('layout')
+    else:
+        form = BucketForm(instance=bucket)
+        return render(request, 'bucketlist_edit.html', {'form':form})
 
+#프로필 (비번)수정
+def p_edit(request, id):
+    post = get_object_or_404(Post, id = id)
+    if request.method == "POST":
+        form = ProfileForm(request.POST, instance=post)
+        if form.is_valid():
+            form.save(commit=False)
+            form.save()
+            return redirect('layout')
+    else:
+        form = ProfileForm(instance=post)
+        return render(request, 'profile_edit.html', {'form':form})
 
-def delete(request, id):
-    post = get_object_or_404(Post, id=id)
+#다이어리 삭제
+def diary_delete(request, id):
+    post = get_object_or_404(Post, id = id)
     post.delete()
     return redirect('layout')
+
+#버킷리스트 삭제
+def bucket_delete(request, id):
+    delete_bucket = get_object_or_404(Bucket, id = id)
+    delete_bucket.delete()
+    return redirect('layout')
+
+#젬 결제
+# def pay(request):
+#     if request.method == "POST":
+#         URL = 'https://kapi.kakao.com/v1/payment/ready'
+#         headers = {
+#             "Authorization": "KakaoAK " + "Kakao Developers에서 생성한 앱의 어드민 키",   # 변경불가
+#             "Content-type": "application/x-www-form-urlencoded;charset=utf-8",  # 변경불가
+#         }
+#         params = {
+#             "cid": "TC0ONETIME",    # 테스트용 코드
+#             "partner_order_id": "1001",     # 주문번호
+#             "partner_user_id": "german",    # 유저 아이디
+#             "item_name": "연어초밥",        # 구매 물품 이름
+#             "quantity": "1",                # 구매 물품 수량
+#             "total_amount": "12000",        # 구매 물품 가격
+#             "tax_free_amount": "0",         # 구매 물품 비과세
+#             "approval_url": "결제 성공 시 이동할 url",
+#             "cancel_url": "결제 취소 시 이동할 url",
+#             "fail_url": "결제 실패 시 이동할 url",
+#         }
+
+#         res = requests.post(URL, headers=headers, params=params)
+#         request.session['tid'] = res.json()['tid']      # 결제 승인시 사용할 tid를 세션에 저장
+#         next_url = res.json()['next_redirect_pc_url']   # 결제 페이지로 넘어갈 url을 저장
+#         return redirect(next_url)
+
+
+#     return render(request, 'shop/pay.html')
+
 # ------예찬이 개발-------

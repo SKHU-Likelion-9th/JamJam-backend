@@ -10,10 +10,10 @@
 <p>먹거리</p>
 <a href="{% url 'course_eat_C' %}">글쓰기</a>
 
+<br><br><br><br>
 {% for eat_Cs in eat_Cs.all %}
 
-{{ eat_Cs.Title }}</br>
-{{ eat_Cs.Writer }}</br>
+<h1><a href="{% url 'course_eat_detail' eat_Cs.id %}">{{ eat_Cs.Title }}</a></h1></br>
 {{ eat_Cs.Write_day }}</br>
 {{ eat_Cs.Image }}</br>
 {{ eat_Cs.big_region }}</br>

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Blog, Comment, Hashtag, Post, Eat_C, Look_C, Play_C, Big_Region, Small_Region  # 민정
+from .models import Blog, Comment, Hashtag, Eat_C, Look_C, Play_C, Big_Region, Small_Region, Post, Profile, Bucket
 
 
 class CreateForm(forms.ModelForm):
@@ -48,6 +48,17 @@ class Small_RegionForm(forms.ModelForm):
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ['title', 'date', 'body']  # 제목, 날짜, 내용
+        fields = ['diary_title', 'diary_date', 'diary_body']#제목, 날짜, 내용
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['nickname']
+
+class BucketForm(forms.ModelForm):
+    class Meta:
+        model = Bucket
+        fields = ['bucket_title', 'bucket_date', 'bucket_body']#제목, 날짜, 내용
+
 
 # ----예찬이 개발 부분------
