@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'jamjamapp.apps.JamjamappConfig',
+    'bookmark',
 ]
 
 MIDDLEWARE = [

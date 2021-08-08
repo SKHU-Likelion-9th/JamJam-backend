@@ -26,7 +26,7 @@
 <p>조회수 {{eat_C.view_count}}개</p>
 
 
-<!-- <h2>댓글</h2>
+<h2>댓글</h2>
 
 <form method="POST" action="{% url 'course_eat_detail' eat_C.id %}">
     {% csrf_token %}
@@ -36,6 +36,6 @@
 
 {% for comment in eat_C.comments.all %}
 <p>{{comment.text}}</p>
-<a href="{% url 'delete_comment' eat_C.id comment.id %}">삭제하기</a>
+<a href="{% url 'course_eat_delete_comment' eat_C.id comment.id %}">삭제하기</a>
 {% endfor %}
- -->
+

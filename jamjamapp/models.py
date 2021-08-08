@@ -88,6 +88,17 @@ class Small_Region(models.Model):
     def __str__(self):
         return self.name
 
+#스크랩
+class Bookmark(models.Model):
+    book_site_name = models.CharField(max_length=50)
+    book_url = models.URLField()
+    
+    def __str__(self):
+        return self.book_site_name + " : " + self.book_url
+
+    class Meta:
+        ordering = ["book_site_name"]
+
 # ----민정이 개발 부분------
 
 class Post(models.Model):
@@ -113,6 +124,5 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.nickname
-
 
 # ----예찬이 개발 부분------

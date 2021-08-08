@@ -1,10 +1,13 @@
+from django.contrib.messages.api import success
+from django.db import models
 from django.http.response import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
-from .models import Blog, Comment, Hashtag, Eat_C, Look_C, Play_C, Big_Region, Small_Region, Profile, Bucket, Post
+from .models import Blog, Bookmark, Comment, Hashtag, Eat_C, Look_C, Play_C, Big_Region, Small_Region, Profile, Bucket, Post
 from .forms import CreateForm, CommentForm, Eat_CForm, Look_CForm, Play_CForm, Big_RegionForm, Small_RegionForm, PostForm, ProfileForm, BucketForm, PostForm
+from django.views.generic.list import ListView
 #from datetime import date, datetime, timedelta
 
 # Create your views here.
@@ -246,14 +249,14 @@ def course_eat_detail(request, id):
         return redirect('course_eat_detail', id)
     else:
         form=CommentForm()
-        return render(request, 'course/course_eat_detail.html', {'eat_C':eat_C})
+        return render(request, 'course/course_eat_detail.html', {'eat_C':eat_C, 'form':form})
 
 #댓글 삭제
 @login_required
-def commu_delete_comment(request, com_id, post_id):
+def course_eat_delete_comment(request, com_id, post_id):
     mycom = Comment.objects.get(id=com_id)
     mycom.delete()
-    return redirect ('commu_detail', post_id)
+    return redirect ('course_eat_detail', post_id)
 
 #course_eat_U
 @login_required
@@ -279,8 +282,8 @@ def course_eat_delete(request, id):
 #course_eat 좋아요
 @login_required
 def course_eat_like(request, pk):
-    if not request.user.is_active:
-        return HttpResponse('First SignIn please')
+    #if not request.user.is_active:
+    #    return HttpResponse('First SignIn please')
 
     eat_C = get_object_or_404(Eat_C, pk=pk)
     user = request.user
@@ -403,6 +406,29 @@ def course_play_R(request, small_region_id):
     play_Cs = Play_C.objects
     return render(request, 'course/course_play_R.html', {'play_Cs':play_Cs, 'small_region':small_region})
 
+#class BookmarkList(ListView):
+#    model = Bookmark
+#
+#class BookmarkCreate(CreateView):
+#    model = Bookmark
+#    fields = ['book_site_name', 'book_url', 'book_contents']
+#    template_name_suffix = '_bookcreate'
+#    success_url = '/'
+#
+#class BookmarkUpdate(UpdateView):
+#    model = Bookmark
+#    fields = ['book_site_name', 'book_url', 'book_contents']
+#    template_name_suffix = '_bookupdate'
+#    success_url = '/'
+#
+#class BookmarkDelete(DetailView):
+#    model = Bookmark
+#    template_name_suffix = '_bookdelete'
+#    success_url = '/'
+#
+#class BookmarkDetail(DetailView):
+#    model = Bookmark
+#    template_name_suffix = '_bookdetail'
 
 
 # ------민정이 개발-------

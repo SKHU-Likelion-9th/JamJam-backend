@@ -16,7 +16,7 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 import jamjamapp.views
 
 urlpatterns = [
@@ -50,9 +50,9 @@ urlpatterns = [
     path('course_play_U/<str:id>/', jamjamapp.views.course_play_U, name='course_play_U'),#play 게시글 수정
     path('course_play_delete/<str:id>/', jamjamapp.views.course_play_delete, name='course_play_delete'),#play 게시글 삭제
     path('course_play_like/<int:pk>', jamjamapp.views.course_play_like, name='course_play_like'),#play 게시글 좋아요
-    
-    
-    # ------민정이 개발-------
+    path('bookmark/', include('bookmark.urls')),
+
+    # ------민정 개발-------
 
     #path('pay/', jamjamapp.views.pay, name='pay'), 아직 수정중
     path('day_detail/', jamjamapp.views.day_detail, name='day_detail'), #데이디테일 페이지
@@ -67,4 +67,7 @@ urlpatterns = [
     path('bucket_edit/<str:id>', jamjamapp.views.bucket_edit, name='bucket_edit'), #버킷리스트 수정
     path('bucket_delete/<str:id>/', jamjamapp.views.bucket_delete, name='bucket_delete'), #버킷리스트 삭제
     path('bucket_detail/<str:id>/', jamjamapp.views.bucket_detail, name='bucket_detail'), #버킷리스트 디테일
+    # ------예찬 개발-------
+
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
