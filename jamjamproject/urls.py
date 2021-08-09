@@ -68,6 +68,9 @@ urlpatterns = [
     path('bucket_delete/<str:id>/', jamjamapp.views.bucket_delete, name='bucket_delete'), #버킷리스트 삭제
     path('bucket_detail/<str:id>/', jamjamapp.views.bucket_detail, name='bucket_detail'), #버킷리스트 디테일
     # ------예찬 개발-------
-
+    path('signin', jamjamapp.views.signin, name='signin'),
+    path('signup', jamjamapp.views.signup, name='signup'),
+    path('', include('django.contrib.auth.urls')),
+    # ------광현이 개발-------
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

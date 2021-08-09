@@ -134,7 +134,11 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 MEDIA_URL = '/media/'
 
+LOGOUT_REDIRECT_URL = 'layout'  # 로그아웃시 보이는 사이트
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_USER_MODEL = 'jamjamapp.CustomUser'  # CustomUser 추가

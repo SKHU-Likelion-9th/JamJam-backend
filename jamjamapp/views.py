@@ -5,11 +5,16 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
-from .models import Blog, Bookmark, Comment, Hashtag, Eat_C, Look_C, Play_C, Big_Region, Small_Region, Profile, Bucket, Post
-from .forms import CreateForm, CommentForm, Eat_CForm, Look_CForm, Play_CForm, Big_RegionForm, Small_RegionForm, PostForm, ProfileForm, BucketForm, PostForm
+from .models import Blog, Bookmark, Comment, Hashtag, Eat_C, Look_C, Play_C, Big_Region, Small_Region, Profile, Bucket, Post, CustomUser  # CustomUser 추가
+from .forms import CreateForm, CommentForm, Eat_CForm, Look_CForm, Play_CForm, Big_RegionForm, Small_RegionForm, PostForm, ProfileForm, BucketForm, PostForm, SigninForm, UserForm  # <---SignForm,UserForm 추가함
 from django.views.generic.list import ListView
 #from datetime import date, datetime, timedelta
-
+# --- 광현추가---
+from django.contrib.auth import login, authenticate
+from django.http import HttpResponse
+from django.contrib import auth
+from django.contrib.auth.forms import AuthenticationForm
+# --- 요기까지---
 # Create your views here.
 
 
@@ -558,3 +563,38 @@ def pay(request):
     return render(request, 'shop/pay.html')
 
 # ------예찬이 개발-------
+# 로그인
+def signin(request):
+    if request.method == "POST":
+        username = request.POST['username']
+        password = request.POST['password']
+        olduser = authenticate(username=username, password=password)
+        
+        if olduser is not None:
+            auth.login(request, olduser)
+            return redirect('layout')
+        else:
+            return HttpResponse("로그인 실패하였습니다. 아이디와 비밀번호를 ", {'form':form})
+
+# 회원가입
+
+
+def signup(request):
+    if request.method == "POST":
+        form = UserForm(request.POST)
+        if form.is_valid():
+            new_user = CustomUser.objects.create_user(username=form.cleaned_data['username'],
+                                                      email=form.cleaned_data['email'],
+                                                      password=form.cleaned_data['password'],
+                                                      nickname=form.cleaned_data['nickname'],
+                                                      phone_number=form.cleaned_data['phone_number'],
+                                                      birthyear=form.cleaned_data['birthyear'],
+                                                      birthday=form.cleaned_data['birthday'],
+                                                      gender=form.cleaned_data['gender'])
+            auth.login(request, new_user)
+            return redirect('layout')
+    else:
+        form = UserForm()
+        return render(request, 'signup.html', {'form': form})
+# ------광현이 개발-------
+

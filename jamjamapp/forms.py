@@ -1,5 +1,6 @@
 from django import forms
-from .models import Blog, Comment, Hashtag, Eat_C, Look_C, Play_C, Big_Region, Small_Region, Post, Profile, Bucket
+from django.forms import fields
+from .models import Blog, Comment, Hashtag, Eat_C, Look_C, Play_C, Big_Region, Small_Region, Post, Profile, Bucket, CustomUser  # <---CustomUser 추가
 
 
 class CreateForm(forms.ModelForm):
@@ -62,3 +63,16 @@ class BucketForm(forms.ModelForm):
 
 
 # ----예찬이 개발 부분------
+
+class SigninForm(forms.ModelForm):
+    class Meta:
+        model = CustomUser
+        fields = ['username', 'password']
+
+
+class UserForm(forms.ModelForm):
+    class Meta:
+        model = CustomUser
+        fields = ['username', 'email', 'password', 'nickname',
+                  'phone_number', 'birthyear', 'birthday', 'gender']
+# ----광현 로그인 개발 부분------

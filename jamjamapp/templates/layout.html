@@ -56,6 +56,27 @@
 <button type="button"><a href="{% url 'profile' %}">profile</a></button>
 <button type="button"><a href="{% url 'bucketlist' %}">bucketlist</a></button>
 <button type="button"><a href="{% url 'pay' %}">pay</a></button>
-
+<button type="button"><a href="{% url 'signup' %}">signup</a></button>
 
 <!--예찬 layout-->
+
+<h1 class="masthead-subheading mb-0">likelion 9th JamJam</h1>
+<!--시작-->
+{% if user.is_authenticated %}
+<h2 class="masthead-subheading mb-0">hello {{user.username}}</h2>
+<a href="{% url 'logout' %}"> logout</a>
+{% else %}
+<form method="POST" action="/signin">
+  {% csrf_token %}
+  <div>
+    아이디 : <input name="username">
+  </div>
+  <div>
+    비밀번호 : <input name="password">
+  </div>
+  <input type="submit" value="submit">
+</form>
+{% endif %}
+      <!--끝-->
+
+ <!--광현 layout-->

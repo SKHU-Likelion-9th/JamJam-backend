@@ -127,3 +127,16 @@ class Profile(models.Model):
         return self.nickname
 
 # ----예찬이 개발 부분------
+
+class CustomUser(AbstractUser):
+    def __str__(self):
+        return self.username
+
+    nickname = models.CharField(max_length=20)
+    phone_number = models.CharField(max_length=20)
+    birthyear = models.CharField(max_length=20)
+    birthday = models.CharField(max_length=20)
+    gender = models.CharField(max_length=20)
+
+
+# ----광현이 개발 부분------
