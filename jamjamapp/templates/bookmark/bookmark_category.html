@@ -1,3 +1,5 @@
+{% load static %}
+
 <h1>New URL category</h1>
 <span class="subheading">카테고리를 추가하여 스크랩한 url을 종류별로 분류해보세요</span>
       <form method="POST">
@@ -21,14 +23,3 @@
         {% endfor %}
     </div>
 </div>
-<br>
-
-<table>
-{% for books in books.all %}
-    <tr>
-        <td><a href="{{books.book_url}}">{{books.book_site_name}}</a></td>
-        <td><a href="{% url 'bookmark_update' books.id %}">수정</a></td>
-        <td><a href="{% url 'bookmark_delete' books.id %}">삭제</a></td>
-    </tr>
-{% endfor %}
-</table>
