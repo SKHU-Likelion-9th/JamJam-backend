@@ -54,7 +54,7 @@ urlpatterns = [
 
     # ------민정 개발-------
 
-    #path('pay/', jamjamapp.views.pay, name='pay'), 아직 수정중
+    path('pay/', jamjamapp.views.pay, name='pay'), #아직 수정중
     path('day_detail/', jamjamapp.views.day_detail, name='day_detail'), #데이디테일 페이지
     path('diary/diary_create', jamjamapp.views.diary_create, name='diary_create'), #데이디테일 작성
     path('bucketlist_write/bucket_create/', jamjamapp.views.bucket_create, name='bucket_create'), #버킷리스트 작성

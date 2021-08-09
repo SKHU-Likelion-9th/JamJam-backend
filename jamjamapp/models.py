@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from functools import update_wrapper
+from django.contrib.auth.models import AbstractUser
 
 #게시글
 class Blog(models.Model):
